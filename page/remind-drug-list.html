@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的用药提醒</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+			
+			.oa-contact-cell.mui-table .mui-table-cell {
+				padding: 11px 0;
+				vertical-align: middle;
+			}
+			
+			.oa-contact-cell {
+				position: relative;
+				margin: -11px 0;
+			}
+			
+			.oa-contact-avatar {
+				width: 75px;
+			}
+			
+			.oa-contact-avatar img {
+				border-radius: 50%;
+			}
+			
+			.oa-contact-content {
+				width: 100%;
+			}
+			
+			.oa-contact-name {
+				margin-right: 20px;
+			}
+			
+			.oa-contact-name,
+			oa-contact-position {
+				float: left;
+			}
+			
+			span {
+				color: grey;
+				font-size: 0.7em;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">我的用药提醒</h1>
+			<a id="add" class="mui-icon mui-icon-plusempty mui-pull-right" style="color: #999;" data-href="addPerson.html"></a>
+		</header>
+
+		<div class="mui-content" style="padding-left:10px;padding-right: 10px;">
+			<ul id="content" class="mui-table-view">
+				<li class="mui-table-view-cell" data-href='remind-drug.html'>
+					<div style="text-align: center;">
+						查询中...
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script id="temp" type="text/template">
+		<li data-drug="<%=(drug)%>" class="mui-table-view-cell" data-href='remind-drug.html'>
+			<img class="mui-media-object mui-pull-left" src="../images/aijiaren/yyjl.jpg" />
+			<span><%=(drug)%></span>
+			<br/>
+			<span>每<%=(meitian)%>天     <%=(meici)%>次</span>
+			<div class="mui-switch mui-switch-mini mui-active">
+				<div class="mui-switch-handle"></div>
+			</div>
+		</li>
+	</script>
+	<script id="tempNone" type="text/html">
+		<li class="mui-table-view-cell" data-href='remind-drug.html'>
+			<div style="text-align: center;">
+
+				没有数据
+			</div>
+		</li>
+	</script>
+	<script src="../js/mui.min.js"></script>
+	<script src="../libs/choujiang/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://121.42.151.57:7999/service/dyyj/demo.js/helper.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/arttmpl.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/service.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		var DyyjDemo = new DyyjDemo('/service/dyyj/demo.js');
+		mui.plusReady(function() {
+			var self = plus.webview.currentWebview();
+			var time = self.time;
+			var drug = self.drug;
+			setTimeout(function() {
+				if (drug) {
+					plus.push.createMessage('该吃' + decodeURIComponent(drug) + '药了');
+					var ina = setInterval(function() {
+						setTimeout(function() {
+							plus.device.vibrate(500);
+						})
+					}, 1000);
+					setTimeout(function() {
+						clearInterval(ina)
+					}, 10000)
+					setTimeout(function() {
+						plus.device.beep(10);
+					})
+				}
+			}, 60000);
+			plus.webview.hide('tixing');
+			plus.webview.hide('remind-drug')
+			addRemindDrug();
+			editRemindDrug();
+			DyyjDemo.listRemindByMemberId(getUserId(), function(result) {
+				var htmlStr = '';
+				if (result.rs) {
+					for (var i = 0; i < result.ms.length; i++) {
+						var d = result.ms[i];
+						d.json.drug = decodeURIComponent(d.json.drug);
+						htmlStr += template('temp', d.json);
+					}
+					document.getElementById("content").innerHTML = htmlStr;
+					mui('.mui-table-view-cell').on('tap', '.mui-switch', function(e) {
+						e.stopPropagation();
+					});
+					mui('.mui-switch')['switch']();
+				} else {
+					document.getElementById("content").innerHTML = document.getElementById("tempNone").innerHTML
+				}
+			});
+		})
+
+		function addRemindDrug() {
+			document.getElementById("add").addEventListener('tap', function() {
+				mui.openWindow({
+					id: 'remind-drug',
+					url: 'remind-drug.html'
+				});
+			});
+		}
+
+		function editRemindDrug() {
+			mui('.mui-table-view').on('tap', 'li', function() {
+				var href = this.getAttribute('data-href');
+				var drug = this.getAttribute('data-drug');
+				mui.openWindow({
+					id: 'remind-drug',
+					url: href,
+					extras: {
+						drug: drug
+					}
+				})
+			})
+		}
+	</script>
+
+</html>

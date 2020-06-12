@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+	</head>
+
+	<body>
+
+		<div class="mui-content">
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" data-href='health-file.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/jkda.jpg"/></span>
+						<div class="mui-media-body">健康管理</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a data-href='wenyisheng'>
+						<span class="mui-icon "><img src="../images/aijiaren/wys.jpg"/></span>
+						<div class="mui-media-body">问医生</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" data-href='remind-drug-list.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/yytx.jpg"/></span>
+						<div class="mui-media-body">用药提醒</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" data-href='aijiaren/yyjl.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/yyjl.jpg"/></span>
+						<div class="mui-media-body">用药记录</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a data-href='aijiaren/fuxm.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/tsfw.jpg"/></span>
+						<div class="mui-media-body">特色服务</div>
+					</a>
+				</li>
+				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a data-href='aijiaren/xtchart.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/xtjc.jpg"/></span>
+						<div class="mui-media-body">血糖监测</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a data-href='aijiaren/xychart.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/xyjc.jpg"/></span>
+						<div class="mui-media-body">血压监测</div>
+					</a>
+				</li>-->
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a data-href='jiankangjiance/health.html'>
+						<span class="mui-icon "><img src="../images/aijiaren/jiankangjiance.jpg"/></span>
+						<div class="mui-media-body">健康监测</div>
+					</a>
+				</li>
+				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a data-href='set.html'>
+						<span class="mui-icon mui-icon-more"></span>
+						<div class="mui-media-body">设置</div>
+					</a>
+				</li>-->
+			</ul>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		mui.plusReady(function() {
+			mui('.mui-table-view-cell').on('tap', 'a', function() {
+				var href = this.getAttribute('data-href');
+				if (href && href.length > 4) {
+					if (href == 'wenyisheng') {
+						var url = "mqqwpa://im/chat?chat_type=wpa&uin=1103954434";
+						var Uri = plus.android.importClass('android.net.Uri');
+						var main = plus.android.runtimeMainActivity();
+						var Intent = plus.android.importClass('android.content.Intent');
+						main.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+						return;
+					} else {
+						mui.openWindow({
+							id: href,
+							url: href
+						});
+					}
+				}
+			});
+		});
+	</script>
+
+</html>

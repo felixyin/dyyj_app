@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.title {
+				margin:20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+			
+			.my-red {
+				height: 80px;
+			}
+			
+			.my-red img {
+				height: 60px;
+			}
+			
+			.my-title {
+				color: white;
+				font-weight: bold;
+				margin-top: -50%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="height: 100px;background: #e70012;">
+			<div class="title my-red">
+				<div id="">
+					<img src="../images/settings/touxiang.jpg" />
+					<span class="my-title" id="name"></span>
+					<img src="../images/erweima/erweima.jpg" class="mui-pull-right" />
+				</div>
+			</div>
+		</header>
+		<div class="mui-content" style="margin-top: 60px;">
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" data-url="settings/bdsbk.html">
+					<a class="mui-navigate-right">
+						绑定社保卡
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell" data-url="settings/wddjj.html">
+					<a class="mui-navigate-right">
+						我的代金券
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-url="settings/jfdh.html">
+					<a class="mui-navigate-right">
+						我的积分
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 25px;">
+
+				<li class="mui-table-view-cell" data-url="aijiaren/fuxm.html">
+					<a class="mui-navigate-right">
+						推荐
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-url="settings/choujiangmain.html">
+					<a class="mui-navigate-right">
+						抽奖
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-url="../updatepasswd.html">
+					<a class="mui-navigate-right">
+						修改密码
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-url='set.html'>
+					<a class="mui-navigate-right">
+						设置
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 25px;">
+				<li class="mui-table-view-cell" data-url="../login.html">
+					<a style="text-align: center;color: #FF3B30;">
+						退出登录
+					</a>
+				</li>
+			</ul>
+		</div>
+		</style>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/service.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../libs/choujiang/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://121.42.151.57:7999/service/dyyj/demo.js/helper.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		
+//		document.getElementById("about").addEventListener('tap', function() {
+//			//获得主页面的webview
+//			var main = plus.webview.currentWebview().parent();
+//			//触发主页面的gohome事件
+//			mui.fire(main, 'gohome');
+//		});
+//		document.getElementById("bdsbkId").addEventListener('tap',function(){
+//			mui.openWindow({
+//				url:'settings/bdsbk.html'
+//			})
+//		});
+		
+		mui('.mui-table-view').on('tap','li',function(){
+			var url = this.getAttribute('data-url');
+			if(!url)return;
+			mui.openWindow({
+				url:url
+			});
+		});
+		var DyyjDemo = new DyyjDemo('/service/dyyj/demo.js');
+			DyyjDemo.getMemberByUserId(getUserId(), function(result) {
+				if (result && result.rs) {
+					var ms = result.ms;
+					console.log(JSON.stringify(ms))
+					if (ms) {
+						document.getElementById("name").innerHTML = ms.name;
+					}
+				}
+			});
+	</script>
+
+</html>
